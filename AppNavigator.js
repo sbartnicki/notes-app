@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 import AuthScreen from "./screens/AuthScreen";
 import NotesListScreen from "./screens/NotesListScreen";
 import NoteDetailsScreen from "./screens/NoteDetailsScreen";
+import NewNoteScreen from "./screens/NewNoteScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,12 +37,19 @@ function AppNavigator() {
                   name="Notes List"
                   component={ NotesListScreen }
                   options={{
-                      title: '',
+                      title: 'Notes List',
                   }}
               />
               <Stack.Screen
                   name="Note Details"
                   component={ NoteDetailsScreen }
+                  options={{
+                      title: '',
+                  }}
+              />
+              <Stack.Screen
+                  name="New Note"
+                  component={ NewNoteScreen }
                   options={{
                       title: '',
                   }}

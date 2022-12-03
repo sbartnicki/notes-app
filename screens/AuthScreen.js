@@ -14,6 +14,11 @@ const AuthScreen = (props) => {
             >
                 <Text>Go to Notes List page</Text>
             </Pressable>
+            <Pressable
+                onPress={() => props.navigation.navigate('New Note')}
+            >
+                <Text>Go to New Note page</Text>
+            </Pressable>
         </View>
     )
 }
