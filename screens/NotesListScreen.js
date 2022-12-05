@@ -5,6 +5,7 @@ import { database } from '../FirebaseConfig';
 import { child, ref, get } from 'firebase/database';
 import { AntDesign } from "@expo/vector-icons";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useFocusEffect } from "@react-navigation/native";
 
 const NotesListScreen = ({ route, navigation }) => {
   const [notes, setNotes] = useState([]);
@@ -25,9 +26,10 @@ const NotesListScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    // fetchUserNotes(1);
-    fetchUserNotes(route.params.userId);
-  }, []);
+    return navigation.addListener('focus', () => {
+      fetchUserNotes(route.params.userId);
+    });
+  }, [navigation]);
 
   const onItemPressHandler = () => {
     navigation.navigate('Log In Page');

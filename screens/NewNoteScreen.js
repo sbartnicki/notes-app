@@ -211,7 +211,7 @@ const NewNoteScreen = ({route, navigation}) => {
             note.imgURI
         )
             .then(res => {
-                navigation.navigate('Notes List', { userId: userId });
+                navigation.navigate('Notes List', { userId: userId, shouldRerender: true });
             })
     }
 
