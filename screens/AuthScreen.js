@@ -8,6 +8,11 @@ const AuthScreen = (props) => {
 
   return (
     <View style={styles.wrapper}>
+      <Pressable
+          onPress={() => props.navigation.navigate('New Note')}
+      >
+        <Text>Go to New Note screen</Text>
+      </Pressable>
       <View style={styles.banner}>
         <Text style={[styles.text, { fontSize: 28 }]}>Notes App</Text>
         <Text style={[styles.text, { fontSize: 20 }]}>
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
   button: {
     padding: 15,
     borderRadius: 5,
-  },
+  }
 });
 
 export default AuthScreen;
