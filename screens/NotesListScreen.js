@@ -37,14 +37,14 @@ const NotesListScreen = ({ route, navigation }) => {
     <View style={styles.wrapper}>
       <View style={styles.navBar}>
         <Pressable
-          onPress={navigation.navigate('New Note')}
+          onPress={() => navigation.navigate('New Note', { userId: route.params.userId, noteId: notes.length })}
           style={styles.navButton}
         >
           <Ionicons name="chevron-back" size={32} color="#283618" />
           <Text style={styles.navText}>LOG OUT</Text>
         </Pressable>
         <Pressable
-          onPress={navigation.navigate('New Note')}
+          onPress={() => navigation.navigate('New Note', { userId: route.params.userId, noteId: notes.length })}
           style={styles.navButton}
         >
           <Text style={styles.navText}>NEW NOTE</Text>
