@@ -55,6 +55,7 @@ const AuthScreen = (props) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('Signed in');
+        props.navigation.navigate('Notes List')
         const user = userCredential.user;
       })
       .catch((error) => {
