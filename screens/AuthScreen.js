@@ -14,7 +14,7 @@ import {
 } from 'firebase/auth';
 // import { writeNoteToDB, fetchUserNotes } from '../FirebaseConfig';
 
-const AuthScreen = (props) => {
+const AuthScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [registered, setRegistered] = useState(false);
@@ -56,6 +56,7 @@ const AuthScreen = (props) => {
       .then((userCredential) => {
         console.log('Signed in');
         const user = userCredential.user;
+        navigation.navigate('Notes List', { user: user.uid });
       })
       .catch((error) => {
         const errorCode = error.code;
