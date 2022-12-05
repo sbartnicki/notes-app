@@ -55,9 +55,8 @@ const AuthScreen = ({ navigation }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('Signed in');
-        props.navigation.navigate('Notes List')
         const user = userCredential.user;
-        navigation.navigate('Notes List', { user: user.uid });
+        navigation.navigate('Notes List', { userId: user.uid });
       })
       .catch((error) => {
         const errorCode = error.code;

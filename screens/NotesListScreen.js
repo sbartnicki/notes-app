@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, Pressable, Text } from 'react-native';
 import Note from '../components/SingleNote';
 import { database } from '../FirebaseConfig';
 import { child, ref, get } from 'firebase/database';
+import { AntDesign } from "@expo/vector-icons";
 
 const NotesListScreen = ({ route, navigation }) => {
-  const [notes, setNotes] = useState();
+  const [notes, setNotes] = useState([]);
 
   const fetchUserNotes = (userId) => {
     get(child(ref(database), 'users/' + userId))
       .then((snapshot) => {
         if (snapshot.exists()) {
+            console.log('snapshot.val(): ', snapshot.val());
           setNotes(snapshot.val());
         } else {
           console.log('No data available');
@@ -22,8 +24,8 @@ const NotesListScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    fetchUserNotes(1);
-    // fetchUserNotes(route.params.user);
+    // fetchUserNotes(1);
+    fetchUserNotes(route.params.userId);
   }, []);
 
   const onItemPressHandler = () => {

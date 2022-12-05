@@ -9,7 +9,7 @@ import Styles from "../styles";
 import { RecordingOptionsPresets } from "expo-av/build/Audio/RecordingConstants";
 import { writeNoteToDB } from "../FirebaseConfig";
 
-const NewNoteScreen = (props) => {
+const NewNoteScreen = ({route, navigation}) => {
 
     const [note, setNote] = useState({
         title: '',
@@ -19,21 +19,23 @@ const NewNoteScreen = (props) => {
     });
     const [soundRecorded, setSoundRecorded] = useState(false);
 
+    const { userId, noteId } = route.params;
+
     let recording = null;
 
-    React.useLayoutEffect(() => {
-        props.navigation.setOptions({
-            headerLeft: () => (
-                <AntDesign name="left" size={ 24 } color="black"
-                           onPress={ () => props.navigation.navigate('Home Screen') }/>
-            ),
-            headerRight: () => (
-                <Pressable onPress={ saveNote }>
-                    <Text>Save</Text>
-                </Pressable>
-            )
-        });
-    }, []);
+    // React.useLayoutEffect(() => {
+    //     navigation.setOptions({
+    //         headerLeft: () => (
+    //             <AntDesign name="left" size={ 24 } color="black"
+    //                        onPress={ () => navigation.navigate('Notes List', { user: userId }) }/>
+    //         ),
+    //         headerRight: () => (
+    //             <Pressable onPress={ saveNote }>
+    //                 <Text>Save</Text>
+    //             </Pressable>
+    //         )
+    //     });
+    // }, []);
 
     const titleHandler = (title) => {
         setNote(note => ({
@@ -195,22 +197,29 @@ const NewNoteScreen = (props) => {
             } )
     }
 
-    const saveNote = async () => {
+    const saveNote = () => {
         console.log('data is saved');
         console.log('data: ', note);
+        console.log('userId: ', userId);
 
         writeNoteToDB(
-            999999,
-            999999,
+            userId,
+            noteId,
             note.title,
             note.content,
             note.audioURI,
             note.imgURI
         )
+            .then(res => {
+                navigation.navigate('Notes List', { userId: userId });
+            })
     }
 
     return (
         <View style={ Styles.wrapper }>
+            <Pressable onPress={ saveNote }>
+                <Text>SAVE</Text>
+            </Pressable>
             <View style={ styles.innerWrapper }>
                 <SafeAreaView style={ styles.inputWrapper }>
                     <TextInput

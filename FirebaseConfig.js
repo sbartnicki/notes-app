@@ -25,7 +25,15 @@ export const writeNoteToDB = (
   audioURI,
   imageURI
 ) => {
-  set(ref(database, `users/${userId}/${noteId}`), {
+
+  console.log('userId: ', userId);
+  console.log('noteId: ', noteId);
+  console.log('title: ', title);
+  console.log('content: ', content);
+  console.log('audioURI: ', audioURI);
+  console.log('imageURI: ', imageURI);
+
+  return set(ref(database, `users/${userId}/${noteId}`), {
     title: title,
     content: content,
     audioURI: audioURI,
