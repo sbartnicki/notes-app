@@ -17,16 +17,27 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const database = getDatabase(app);
-export const writeTest = (userId, email) => {
-  set(ref(database, 'users/' + userId), {
-    email: email,
+export const writeNoteToDB = (
+  userId,
+  noteId,
+  title,
+  content,
+  audioURI,
+  imageURI
+) => {
+  set(ref(database, `users/${userId}/${noteId}`), {
+    title: title,
+    content: content,
+    audioURI: audioURI,
+    imageURI: imageURI,
   });
 };
-export const readTest = () => {
-  get(child(ref(database), 'users/'))
+export const fetchUserNotes = (userId) => {
+  get(child(ref(database), 'users/' + userId))
     .then((snapshot) => {
       if (snapshot.exists()) {
         console.log(snapshot.val());
+        return snapshot.val();
       } else {
         console.log('No data available');
       }
