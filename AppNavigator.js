@@ -37,6 +37,7 @@ function AppNavigator() {
           component={NotesListScreen}
           options={{
             title: '',
+            headerShown: false,
           }}
         />
         <Stack.Screen
