@@ -1,21 +1,64 @@
-import { View, Text, Pressable } from "react-native";
+import { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import Note from '../components/SingleNote';
+import { database } from '../FirebaseConfig';
+import { child, ref, get } from 'firebase/database';
 
-const NotesListScreen = (props) => {
-    return (
-        <View>
-            <Text>NotesListScreen Screen</Text>
-            <Pressable
-                onPress={() => props.navigation.navigate('Log In Page')}
-            >
-                <Text>Go to Auth Page</Text>
-            </Pressable>
-            <Pressable
-                onPress={() => props.navigation.navigate('Note Details')}
-            >
-                <Text>Go to Note detail page</Text>
-            </Pressable>
-        </View>
-    )
-}
+const NotesListScreen = ({ route, navigation }) => {
+  const [notes, setNotes] = useState();
+
+  const fetchUserNotes = (userId) => {
+    get(child(ref(database), 'users/' + userId))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setNotes(snapshot.val());
+        } else {
+          console.log('No data available');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchUserNotes(1);
+    // fetchUserNotes(route.params.user);
+  }, []);
+
+  const onItemPressHandler = () => {
+    navigation.navigate('Log In Page');
+  };
+
+  return (
+    <ScrollView style={styles.wrapper}>
+      {notes
+        ? notes.map((note) => {
+            return (
+              <Note
+                key={note.title}
+                title={note.title}
+                content={note.content}
+                isAudio={note.audioURI ? true : false}
+                isImage={note.imageURI ? true : false}
+                note={note}
+                onItemPress={onItemPressHandler}
+              />
+            );
+          })
+        : null}
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    // height: '100%',
+    backgroundColor: '#606C38',
+    padding: 15,
+    color: '#FEFAE0',
+  },
+});
 
 export default NotesListScreen;
