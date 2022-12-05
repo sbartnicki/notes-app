@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
+import { getDatabase, ref, set, child, get } from 'firebase/database';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -16,4 +16,22 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const database = getDatabase(app);
+const database = getDatabase(app);
+export const writeTest = (userId, email) => {
+  set(ref(database, 'users/' + userId), {
+    email: email,
+  });
+};
+export const readTest = () => {
+  get(child(ref(database), 'users/'))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+      } else {
+        console.log('No data available');
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
