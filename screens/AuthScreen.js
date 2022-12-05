@@ -12,8 +12,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-// import { ref, set } from 'firebase/database';
-import { writeNoteToDB, fetchUserNotes } from '../FirebaseConfig';
+// import { writeNoteToDB, fetchUserNotes } from '../FirebaseConfig';
 
 const AuthScreen = (props) => {
   const [email, setEmail] = useState('');
@@ -57,8 +56,6 @@ const AuthScreen = (props) => {
       .then((userCredential) => {
         console.log('Signed in');
         const user = userCredential.user;
-        writeNoteToDB(0, 0, 'Title2', 'Content2', 'testURI', 'testimgageURI');
-        fetchUserNotes(22);
       })
       .catch((error) => {
         const errorCode = error.code;
