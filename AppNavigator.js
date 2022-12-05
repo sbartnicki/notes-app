@@ -2,10 +2,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { Platform } from 'react-native';
 
-import AuthScreen from "./screens/AuthScreen";
-import NotesListScreen from "./screens/NotesListScreen";
-import NoteDetailsScreen from "./screens/NoteDetailsScreen";
-import NewNoteScreen from "./screens/NewNoteScreen";
+import AuthScreen from './screens/AuthScreen';
+import NotesListScreen from './screens/NotesListScreen';
+import NoteDetailsScreen from './screens/NoteDetailsScreen';
+import NewNoteScreen from './screens/NewNoteScreen';
 
 const Stack = createStackNavigator();
 
@@ -47,13 +47,14 @@ function AppNavigator() {
             title: '',
           }}
         />
-          <Stack.Screen
-              name="New Note"
-              component={ NewNoteScreen }
-              options={{
-                  title: '',
-              }}
-          />
+        <Stack.Screen
+          name="New Note"
+          component={NewNoteScreen}
+          options={{
+            title: '',
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
