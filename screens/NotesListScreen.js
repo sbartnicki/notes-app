@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Pressable, Text } from 'react-native';
 import Note from '../components/SingleNote';
-import { database } from '../FirebaseConfig';
+import { database, auth } from '../FirebaseConfig';
 import { child, ref, get } from 'firebase/database';
 import { AntDesign } from "@expo/vector-icons";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from "@react-navigation/native";
+import { signOut } from 'firebase/auth';
 
 const NotesListScreen = ({ route, navigation }) => {
   const [notes, setNotes] = useState([]);
@@ -35,6 +36,20 @@ const NotesListScreen = ({ route, navigation }) => {
   }, [navigation]);
 
   /**
+   * Function name: logOut
+   * Purpose: Logs out the user
+   * */
+  const logOut = () => {
+    signOut(auth)
+        .then(() => {
+          navigation.navigate('Log In Page');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
+  /**
    * Function name: onItemPressHandler
    * Purpose: Opens note details page
    * */
@@ -46,7 +61,7 @@ const NotesListScreen = ({ route, navigation }) => {
     <View style={styles.wrapper}>
       <View style={styles.navBar}>
         <Pressable
-          onPress={() => navigation.navigate('New Note', { userId: route.params.userId, noteId: notes.length })}
+          onPress={logOut}
           style={styles.navButton}
         >
           <Ionicons name="chevron-back" size={32} color="#283618" />

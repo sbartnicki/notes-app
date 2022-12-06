@@ -63,6 +63,8 @@ const AuthScreen = ({ navigation }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('Signed in');
+        setEmail('');
+        setPassword('');
         const user = userCredential.user;
         navigation.navigate('Notes List', { userId: user.uid });
       })
@@ -98,6 +100,7 @@ const AuthScreen = ({ navigation }) => {
           autoCompleteType="email"
           keyboardType="email-address"
           placeholder="Insert email..."
+          value={ email }
         />
         <TextInput
           style={styles.textInput}
@@ -105,8 +108,10 @@ const AuthScreen = ({ navigation }) => {
           autoCapitalize="none"
           autoCorrect={false}
           autoCompleteType="password"
+          secureTextEntry={ true }
           keyboardType="visible-password"
           placeholder="Insert password..."
+          value={ password }
         />
       </View>
       <View style={styles.buttonContainer}>
