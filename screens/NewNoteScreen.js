@@ -5,7 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
-  Alert,
+  Alert, Image,
 } from 'react-native';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 import {
@@ -18,73 +18,79 @@ import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
+
 import Styles from '../styles';
 import { RecordingOptionsPresets } from 'expo-av/build/Audio/RecordingConstants';
 import { writeNoteToDB } from '../FirebaseConfig';
 
 const NewNoteScreen = ({ route, navigation }) => {
+
+  // storing the new note info
   const [note, setNote] = useState({
     title: '',
     content: '',
     imgURI: '',
     audioURI: '',
   });
-  const [soundRecorded, setSoundRecorded] = useState(false);
 
+  // getting data from the router params for new note
   const { userId, noteId } = route.params;
 
+  // defining a variable for storing an audio record
   let recording = null;
 
-  // React.useLayoutEffect(() => {
-  //     navigation.setOptions({
-  //         headerLeft: () => (
-  //             <AntDesign name="left" size={ 24 } color="black"
-  //                        onPress={ () => navigation.navigate('Notes List', { user: userId }) }/>
-  //         ),
-  //         headerRight: () => (
-  //             <Pressable onPress={ saveNote }>
-  //                 <Text>Save</Text>
-  //             </Pressable>
-  //         )
-  //     });
-  // }, []);
-
+  /**
+   * Function name: titleHandler
+   * Purpose: setting the title to state
+   * @param title: title
+   * */
   const titleHandler = (title) => {
     setNote((note) => ({
       ...note,
       title,
     }));
-
-    console.log('note: ', note);
   };
 
+  /**
+   * Function name: contentHandler
+   * Purpose: setting the content to state
+   * @param content: content
+   * */
   const contentHandler = (content) => {
     setNote((note) => ({
       ...note,
       content,
     }));
-
-    console.log('note: ', note);
   };
 
+  /**
+   * Function: imageSelectedHandler
+   * Purpose: setting the image URI to state
+   * @param imgURI: image URI
+   * */
   const imageSelectedHandler = (imgURI) => {
     setNote((note) => ({
       ...note,
       imgURI,
     }));
-
-    console.log('note: ', note);
   };
 
+  /**
+   * Function: audioRecordedHandler
+   * Purpose: setting the audio URI to state
+   * @param audioURI: image URI
+   * */
   const audioRecordedHandler = (audioURI) => {
     setNote((note) => ({
       ...note,
       audioURI,
     }));
-
-    console.log('note: ', note);
   };
 
+  /**
+   * Function: verifyPermission
+   * Purpose: Verifying permissions to access to camera and library
+   * */
   const verifyPermission = async () => {
     const cameraResult = await ImagePicker.requestCameraPermissionsAsync();
     const libraryResult =
@@ -104,6 +110,10 @@ const NewNoteScreen = ({ route, navigation }) => {
     return true;
   };
 
+  /**
+   * Function name: verifyAudioPermission
+   * Purpose: Checks permissions for audio
+   * */
   const verifyAudioPermission = async () => {
     const result = await Audio.requestPermissionsAsync();
     if (result.status !== 'granted') {
@@ -117,6 +127,10 @@ const NewNoteScreen = ({ route, navigation }) => {
     return true;
   };
 
+  /**
+   * Function name: takeImageHandler
+   * Purpose: Takes a picture via camera
+   * */
   const takeImageHandler = async () => {
     const hasPermission = await verifyPermission();
     if (!hasPermission) {
@@ -134,6 +148,10 @@ const NewNoteScreen = ({ route, navigation }) => {
     }
   };
 
+  /**
+   * Function name: retrieveImageHandler
+   * Purpose: Using a picture from library
+   * */
   const retrieveImageHandler = async () => {
     const hasPermission = await verifyPermission();
     if (!hasPermission) {
@@ -152,6 +170,10 @@ const NewNoteScreen = ({ route, navigation }) => {
     }
   };
 
+  /**
+   * Function name: startRecordingAudio
+   * Purpose: Starts audio recording
+   * */
   const startRecordingAudio = async () => {
     const hasPermission = await verifyAudioPermission();
     if (!hasPermission) {
@@ -182,21 +204,26 @@ const NewNoteScreen = ({ route, navigation }) => {
     }
   };
 
+  /**
+   * Function name: stopRecordingAudio
+   * Purpose: Stops audio recording
+   * */
   const stopRecordingAudio = async () => {
     try {
       await recording.stopAndUnloadAsync();
       await saveFileLocally(recording.getURI(), 'audio');
-      setSoundRecorded(true);
       console.log('recording stopped!');
     } catch (error) {
-      setSoundRecorded(false);
       console.log('An error occurred on stopping record:');
       console.log(error);
     }
   };
 
+  /**
+   * Function name: saveFileLocally
+   * Purpose: Saves file to the device's local storage
+   * */
   const saveFileLocally = async (URI, fileType) => {
-    console.log('imgURI: ', URI);
     let file = URI;
     let fileName = file.split('/').pop();
     let destinationUri = FileSystem.documentDirectory + fileName;
@@ -216,10 +243,11 @@ const NewNoteScreen = ({ route, navigation }) => {
       });
   };
 
+  /**
+   * Function name: saveNote
+   * Purpose: Saves a newly created note
+   * */
   const saveNote = () => {
-    console.log('data is saved');
-    console.log('data: ', note);
-    console.log('userId: ', userId);
 
     writeNoteToDB(
       userId,
@@ -267,11 +295,15 @@ const NewNoteScreen = ({ route, navigation }) => {
             numberOfLines={10}
             style={styles.contentInput}
             placeholder={'Start typing note here...'}
-            placeholderTextColor={'#fff'}
+            placeholderTextColor={'#e6bb8b'}
             onChangeText={(text) => contentHandler(text)}
           ></TextInput>
         </SafeAreaView>
         <View style={styles.controlsWrapper}>
+          {
+            note.imgURI &&
+              <Image style={styles.image} source={{ width: '100%', height:200, uri: note.imgURI }}></Image>
+          }
           <Pressable
             style={[styles.button, { marginBottom: 10 }]}
             onPress={takeImageHandler}
@@ -315,7 +347,8 @@ const styles = StyleSheet.create({
   titleInput: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#856d3d',
+    color: '#283618',
+    marginBottom: 20
   },
   contentInput: {
     color: '#fff',
@@ -372,6 +405,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  image: {
+    marginVertical: 20,
+    borderRadius: 10
+  }
 });
 
 export default NewNoteScreen;

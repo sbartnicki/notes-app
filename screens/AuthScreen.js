@@ -19,6 +19,10 @@ const AuthScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [registered, setRegistered] = useState(false);
 
+  /**
+   * Function name: registerPressed
+   * Purpose: Register a new user
+  * */
   const registerPressed = () => {
     if (email.length < 4) {
       Alert.alert('Please enter an email address.');
@@ -51,6 +55,10 @@ const AuthScreen = ({ navigation }) => {
       });
   };
 
+  /**
+   * Function name: loginPressed
+   * Purpose: Logging the user in
+   * */
   const loginPressed = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

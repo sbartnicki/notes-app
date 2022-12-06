@@ -10,11 +10,14 @@ import { useFocusEffect } from "@react-navigation/native";
 const NotesListScreen = ({ route, navigation }) => {
   const [notes, setNotes] = useState([]);
 
+  /**
+   * Function name: fetchUserNotes
+   * Purpose: Makes a request for all notices
+   * */
   const fetchUserNotes = (userId) => {
     get(child(ref(database), 'users/' + userId))
       .then((snapshot) => {
         if (snapshot.exists()) {
-            console.log('snapshot.val(): ', snapshot.val());
           setNotes(snapshot.val());
         } else {
           console.log('No data available');
@@ -31,8 +34,12 @@ const NotesListScreen = ({ route, navigation }) => {
     });
   }, [navigation]);
 
-  const onItemPressHandler = () => {
-    navigation.navigate('Log In Page');
+  /**
+   * Function name: onItemPressHandler
+   * Purpose: Opens note details page
+   * */
+  const onItemPressHandler = (note) => {
+    navigation.navigate('Note Details', { note: note });
   };
 
   return (
@@ -64,7 +71,7 @@ const NotesListScreen = ({ route, navigation }) => {
                   isAudio={note.audioURI ? true : false}
                   isImage={note.imageURI ? true : false}
                   note={note}
-                  onItemPress={onItemPressHandler}
+                  onItemPress={() => onItemPressHandler(note)}
                 />
               );
             })
