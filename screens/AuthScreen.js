@@ -22,7 +22,7 @@ const AuthScreen = ({ navigation }) => {
   /**
    * Function name: registerPressed
    * Purpose: Register a new user
-  * */
+   * */
   const registerPressed = () => {
     if (email.length < 4) {
       Alert.alert('Please enter an email address.');
@@ -77,11 +77,6 @@ const AuthScreen = ({ navigation }) => {
 
   return (
     <View style={styles.wrapper}>
-      <Pressable
-          onPress={() => props.navigation.navigate('New Note')}
-      >
-        <Text>Go to New Note screen</Text>
-      </Pressable>
       <View style={styles.banner}>
         <Text style={[styles.text, { fontSize: 28 }]}>Notes App</Text>
         <Text style={[styles.text, { fontSize: 20 }]}>
@@ -100,7 +95,7 @@ const AuthScreen = ({ navigation }) => {
           autoCompleteType="email"
           keyboardType="email-address"
           placeholder="Insert email..."
-          value={ email }
+          value={email}
         />
         <TextInput
           style={styles.textInput}
@@ -108,10 +103,10 @@ const AuthScreen = ({ navigation }) => {
           autoCapitalize="none"
           autoCorrect={false}
           autoCompleteType="password"
-          secureTextEntry={ true }
+          secureTextEntry={true}
           keyboardType="visible-password"
           placeholder="Insert password..."
-          value={ password }
+          value={password}
         />
       </View>
       <View style={styles.buttonContainer}>
